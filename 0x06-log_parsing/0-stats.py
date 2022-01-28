@@ -1,15 +1,56 @@
 #!/usr/bin/python3
-import random
-import sys
-from time import sleep
-import datetime
 
-for i in range(10000):
-    sleep(random.random())
-    sys.stdout.write("{:d}.{:d}.{:d}.{:d} - [{}] \"GET /projects/260 HTTP/1.1\" {} {}\n".format(
-        random.randint(1, 255), random.randint(1, 255), random.randint(1, 255), random.randint(1, 255),
-        datetime.datetime.now(),
-        random.choice([200, 301, 400, 401, 403, 404, 405, 500]),
-        random.randint(1, 1024)
-    ))
-    sys.stdout.flush()
+""" .
+"""
+
+
+import sys
+
+
+total_file_size = {'size': 0}
+codes = {
+    '200': 0,
+    '301': 0,
+    '400': 0,
+    '401': 0,
+    '403': 0,
+    '404': 0,
+    '405': 0,
+    '500': 0
+}
+
+
+def print_v():
+    """resume
+    """
+    print('File size: {}'.format(total_file_size['size']))
+    for key in sorted(codes.keys()):
+        if codes[key] > 0:
+            print('{}: {}'.format(key, codes[key]))
+
+
+def o_r(line):
+    """stats
+    """
+    try:
+        line = line.split(' ')
+        size = line[-1]
+        total_file_size['size'] += int(size)
+        if line[-2] in codes:
+            codes[line[-2]] += 1
+    except Exception as e:
+        pass
+
+
+if __name__ == '__main__':
+    num_lines = 1
+    try:
+        for line in sys.stdin:
+            o_r(line)
+            if num_lines % 10 == 0:
+                print_v()
+            num_lines += 1
+    except KeyboardInterrupt:
+        print_v()
+        raise
+    print_v()
