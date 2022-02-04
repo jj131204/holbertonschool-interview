@@ -27,8 +27,7 @@ def print_v():
     for key in sorted(codes.keys()):
         if codes[key] > 0:
             print('{}: {}'.format(key, codes[key]))
-
-
+ 
 def o_r(line):
     """stats
     """
