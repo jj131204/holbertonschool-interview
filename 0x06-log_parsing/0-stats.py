@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 
-"""
-Log Parser
+""" .
 """
 
 
@@ -21,9 +20,8 @@ codes = {
 }
 
 
-def print_data():
-    """
-        Prints the resume
+def print_v():
+    """resume
     """
     print('File size: {}'.format(total_file_size['size']))
     for key in sorted(codes.keys()):
@@ -31,9 +29,8 @@ def print_data():
             print('{}: {}'.format(key, codes[key]))
 
 
-def operate_resume(line):
-    """
-        Operates with the resume stats
+def o_r(line):
+    """stats
     """
     try:
         line = line.split(' ')
@@ -49,11 +46,11 @@ if __name__ == '__main__':
     num_lines = 1
     try:
         for line in sys.stdin:
-            operate_resume(line)
+            o_r(line)
             if num_lines % 10 == 0:
-                print_data()
+                print_v()
             num_lines += 1
     except KeyboardInterrupt:
-        print_data()
+        print_v()
         raise
-    print_data()
+    print_v()
