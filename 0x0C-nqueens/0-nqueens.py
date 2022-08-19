@@ -1,45 +1,79 @@
 #!/usr/bin/python3
-"""Solving N Queens with Backtracing"""
-
+"""
+N queens puzzle is the challenge of placing N non-attacking queens
+"""
 import sys
 
 
-def nqueens(queens, xy_diff, xy_sum):
-    """Args:
-        queens: columns occupied by queens
-        xy_diff: positive slope diagonals occupied by queens
-        xy_sum: negative slope diagonals occupied by queens
+def printB(brd):
     """
-    p = len(queens)
-    if p == n:
-        queen_col.append(queens)
-        return None
-    for q in range(n):
-        if q not in queens and p - q not in xy_diff and p + q not in xy_sum:
-            nqueens(queens + [q], xy_diff + [p - q], xy_sum + [p + q])
+    print board
+    """
+    r = []
+    for x in brd:
+        for c in x:
+            if c == 1:
+                r.append([brd.index(x), x.index(c)])
+    print(r)
 
 
-def parse_argv():
-    """Checks for usage errors"""
+def is_safe(brd, row, col, n):
+    """
+    is_safe
+    """
+    for i in range(col):
+
+        if brd[row][i] + brd[row][i + 1] != 0:
+            return False
+
+    for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
+        if brd[i][j] == 1:
+            return False
+
+    for i, j in zip(range(row, n, 1), range(col, -1, -1)):
+        if brd[i][j] == 1:
+            return False
+
+    return True
+
+
+def nqueen(brd, col, n):
+    """
+    nqueen
+    """
+
+    if (col >= n):
+        printB(brd)
+
+    for x in range(n):
+        if is_safe(brd, x, col, n):
+            brd[x][col] = 1
+            if nqueen(brd, col+1, n):
+                return True
+            brd[x][col] = 0
+
+    return False
+
+
+# initial run starting from the col 0!
+def main():
+    """
+    Main
+    """
     if len(sys.argv) != 2:
         print("Usage: nqueens N")
-        sys.exit(1)
-    if not sys.argv[1].isdigit():
+        exit(1)
+    if sys.argv[1].isnumeric():
+        n = int(sys.argv[1])
+    else:
         print("N must be a number")
-        sys.exit(1)
-    n = int(sys.argv[1])
+        exit(1)
     if n < 4:
         print("N must be at least 4")
-        sys.exit(1)
-    return n
+        exit(1)
+    brd = [[0 for x in range(n)] for y in range(n)]
+    nqueen(brd, 0, n)
 
 
-if __name__ == "__main__":
-    n = parse_argv()
-    queen_col = []
-    nqueens([], [], [])
-    for row in range(len(queen_col)):
-        queen_pos = []
-        for col in range(len(queen_col[row])):
-            queen_pos.append([col, queen_col[row][col]])
-        print(queen_pos)
+if __name__ == '__main__':
+    main()
